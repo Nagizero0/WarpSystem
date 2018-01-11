@@ -1,7 +1,8 @@
 # WarpSystem
 PMMP用ワーププラグイン<br>
 SimpleWarpの座標ファイル(warps.yml)をそのまま使用する事が出来ます<br>
-実装してほしい機能があればIssuesかフォーラムのコメントで言って下さい
+実装してほしい機能や不具合があればIssuesかフォーラムのコメントで言って下さい<br>
+二次配布、改造配布禁止
 
 | ![Download icon](https://storage.googleapis.com/material-icons/external-assets/v4/icons/svg/ic_file_download_black_18px.svg) PHAR |
 | :---: |
