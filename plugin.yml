@@ -1,0 +1,33 @@
+name: WarpSystem
+main: nagi\WarpSystem
+version: 1.0.0
+api:
+  - 3.0.0
+  - 3.0.0-ALPHA8
+  - 3.0.0-ALPHA9
+  - 3.0.0-ALPHA10
+description: ワーププラグイン
+author: Nagizero0
+commands:
+ warp:
+  description: "指定したワープ地点にワープします"
+  usage: /warp <ワープ地点名> [プレイヤー名]
+ listwarps:
+  description: "ワープ地点の一覧を表示します"
+  usage: /listwarps
+ addwarp:
+  description: "ワープ地点を作成します"
+  usage: /addwarp <ワープ地点名> [<x> <y> <z> <ワールド名>|<プレイヤー名>]
+  permission: op
+ delwarp:
+  description: "ワープ地点を削除します"
+  usage: /delwarp <ワープ地点名>
+  permission: op
+ openwarp:
+  description: "ワープ地点を開放します"
+  usage: /openwarp <ワープ地点名>
+  permission: op
+ closewarp:
+  description: "ワープ地点を閉鎖します"
+  usage: /closewarp <ワープ地点名>
+  permission: op
