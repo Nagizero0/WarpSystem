@@ -98,24 +98,22 @@ class WarpSystem extends PluginBase implements Listener{
 			}else if(!isset($args[4])){
 				$sender->sendMessage("使い方 : /addwarp <ワープ地点名> <x> <y> <z> <ワールド名>");
 			}else{
-				$x = $args[1];
-				$y = $args[2];
-				$z = $args[3];
+				$x = (int) $args[1];
+				$y = (int) $args[2];
+				$z = (int) $args[3];
 				$level = $args[4];
 				if(!$this->warps->exists($args[0])){
-					if(is_numeric($x) && is_numeric($y) && is_numeric($z)){
-						if($this->getServer()->loadLevel($level)){
-							$this->AddWarp($args[0], $x, $y, $z, $level);
-							$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
-						}else{
-							$player->sendMessage(self::TAG."§cワールド§e".$level."§cは存在しません");
-						}
+					if($this->getServer()->loadLevel($level)){
+						$this->AddWarp($args[0], $x, $y, $z, $level);
+						$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
 					}else{
-						$sender->sendMessage(self::TAG."§c座標は数字で入力して下さい");
+						$player->sendMessage(self::TAG."§cワールド§e".$level."§cは存在しません");
 					}
 				}else{
-					$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
+					$sender->sendMessage(self::TAG."§c座標は数字で入力して下さい");
 				}
+			}else{
+				$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
 			}
 			return true;
 
