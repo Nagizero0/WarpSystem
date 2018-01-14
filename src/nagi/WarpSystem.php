@@ -108,7 +108,7 @@ class WarpSystem extends PluginBase implements Listener{
 							$this->AddWarp($args[0], $x, $y, $z, $level);
 							$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
 						}else{
-							$player->sendMessage(self::TAG."§cワールド§e".$level."§cは存在しません");
+							$sender->sendMessage(self::TAG."§cワールド§e".$level."§cは存在しません");
 						}
 					}else{
 						$sender->sendMessage(self::TAG."§c座標は数字で入力して下さい");
