@@ -26,42 +26,43 @@ class WarpSystem extends PluginBase implements Listener{
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{
-		if(!$sender instanceof Player){
-			$sender->sendMessage(self::TAG."§cゲーム内で使用して下さい");
-			return true;
-		}
 		switch($command->getName()){
 			case "warp":
-			if(!isset($args[0])){
-				if($sender->isOp()){
-					$sender->sendMessage("使い方 : /warp <ワープ地点名> [プレイヤー名]");
-				}else{
-					$sender->sendMessage("使い方 : /warp <ワープ地点名>");
-				}
-			}else{
-				if($this->warps->exists($args[0])){
+			if($sender instanceof Player){
+				if(!isset($args[0])){
 					if($sender->isOp()){
-						if(isset($args[1])){
-							$player = $this->getServer()->getPlayer($args[1]);
-							if($player instanceof Player){
-								$this->Warp($player, $args[0]);
-								$sender->sendMessage(self::TAG."§e".$args[1]."§bを§a".$args[0]."§bにワープさせました");
-							}else{
-								$sender->sendMessage(self::TAG."§e".$args[1]."§cはサーバー内にいません");
-							}
-						}else{
-							$this->Warp($sender, $args[0]);
-							$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
-						}
-					}else if($this->isOpenedWarp($args[0])){
-						$this->Warp($sender, $args[0]);
-						$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
+						$sender->sendMessage("使い方 : /warp <ワープ地点名> [プレイヤー名]");
 					}else{
-						$sender->sendMessage(self::TAG."§a".$args[0]."§cにワープする権限がありません");
+						$sender->sendMessage("使い方 : /warp <ワープ地点名>");
 					}
 				}else{
-					$sender->sendMessage(self::TAG."§a".$args[0]."§cというワープ地点は存在しません");
+					if($this->warps->exists($args[0])){
+						if($sender->isOp()){
+							if(isset($args[1])){
+								$player = $this->getServer()->getPlayer($args[1]);
+								if($player instanceof Player){
+									$this->Warp($player, $args[0]);
+									$sender->sendMessage(self::TAG."§e".$args[1]."§bを§a".$args[0]."§bにワープさせました");
+								}else{
+									$sender->sendMessage(self::TAG."§e".$args[1]."§cはサーバー内にいません");
+								}
+							}else{
+								$this->Warp($sender, $args[0]);
+								$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
+							}
+						}else if($this->isOpenedWarp($args[0])){
+							$this->Warp($sender, $args[0]);
+							$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
+						}else{
+							$sender->sendMessage(self::TAG."§a".$args[0]."§cにワープする権限がありません");
+						}
+					}else{
+						$sender->sendMessage(self::TAG."§a".$args[0]."§cというワープ地点は存在しません");
+					}
 				}
+			}else{
+				$sender->sendMessage(self::TAG."§cゲーム内で使用して下さい");
+				return true;
 			}
 			return true;
 
@@ -69,15 +70,19 @@ class WarpSystem extends PluginBase implements Listener{
 			if(!isset($args[0])){
 				$sender->sendMessage("使い方 : /addwarp <ワープ地点名> [<x> <y> <z> <ワールド名>|<プレイヤー名>]");
 			}else if(!isset($args[1])){
-				$x = $sender->x;
-				$y = $sender->y;
-				$z = $sender->z;
-				$level = $sender->getLevel()->getName();
-				if(!$this->warps->exists($args[0])){
-					$this->AddWarp($args[0], $x, $y, $z, $level);
-					$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
+				if($sender instanceof Player){
+					$x = $sender->x;
+					$y = $sender->y;
+					$z = $sender->z;
+					$level = $sender->getLevel()->getName();
+					if(!$this->warps->exists($args[0])){
+						$this->AddWarp($args[0], $x, $y, $z, $level);
+						$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
+					}else{
+						$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
+					}
 				}else{
-					$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
+					$sender->sendMessage("使い方 : /addwarp <ワープ地点名> [<x> <y> <z> <ワールド名>|<プレイヤー名>]");
 				}
 			}else if(!isset($args[2])){
 				$player = $this->getServer->getPlayer($args[1]);
@@ -98,12 +103,12 @@ class WarpSystem extends PluginBase implements Listener{
 			}else if(!isset($args[4])){
 				$sender->sendMessage("使い方 : /addwarp <ワープ地点名> <x> <y> <z> <ワールド名>");
 			}else{
-				$x = $args[1];
-				$y = $args[2];
-				$z = $args[3];
-				$level = $args[4];
-				if(!$this->warps->exists($args[0])){
-					if(is_numeric($x) && is_numeric($y) && is_numeric($z)){
+				if(is_numeric($args[1]) && is_numeric($args[2]) && is_numeric($args[3])){
+					$x = (Float) $args[1];
+					$y = (Float) $args[2];
+					$z = (Float) $args[3];
+					$level = $args[4];
+					if(!$this->warps->exists($args[0])){
 						if($this->getServer()->loadLevel($level)){
 							$this->AddWarp($args[0], $x, $y, $z, $level);
 							$sender->sendMessage(self::TAG."§bワープ地点§a".$args[0]."§bを作成しました§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level.")");
@@ -111,10 +116,10 @@ class WarpSystem extends PluginBase implements Listener{
 							$sender->sendMessage(self::TAG."§cワールド§e".$level."§cは存在しません");
 						}
 					}else{
-						$sender->sendMessage(self::TAG."§c座標は数字で入力して下さい");
+						$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
 					}
 				}else{
-					$sender->sendMessage(self::TAG."§cワープ地点§a".$args[0]."§cは既に存在します");
+					$sender->sendMessage(self::TAG."§c座標は数字で入力して下さい");
 				}
 			}
 			return true;
@@ -183,6 +188,7 @@ class WarpSystem extends PluginBase implements Listener{
 				}
 			}
 			$sender->sendMessage(" ");
+			return true;
 		}
 		return true;
 	}
