@@ -14,7 +14,7 @@ use pocketmine\Server;
 
 class WarpSystem extends PluginBase implements Listener{
 
-	const TAG = "§f[§aWS§f]";
+	const TAG = "§f[§aWarpSystem§f]";
 
 	public function onEnable(){
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -42,22 +42,23 @@ class WarpSystem extends PluginBase implements Listener{
 								$player = $this->getServer()->getPlayer($args[1]);
 								if($player instanceof Player){
 									$this->Warp($player, $args[0]);
-									$sender->sendMessage(self::TAG."§e".$args[1]."§bを§a".$args[0]."§bにワープさせました");
+									$sender->sendTip("§e".$args[1]."§bを§a".$args[0]."§bにワープさせました");
+									$player->sendTip("§e".$sender->getName()."§bによって§a".$args[0]."§bにワープさせられました");
 								}else{
-									$sender->sendMessage(self::TAG."§e".$args[1]."§cはサーバー内にいません");
+									$sender->sendTip("§e".$args[1]."§cはサーバー内にいません");
 								}
 							}else{
 								$this->Warp($sender, $args[0]);
-								$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
+								$sender->sendTip("§a".$args[0]."§bにワープしました");
 							}
 						}else if($this->isOpenedWarp($args[0])){
 							$this->Warp($sender, $args[0]);
-							$sender->sendMessage(self::TAG."§a".$args[0]."§bにワープしました");
+							$sender->sendTip("§a".$args[0]."§bにワープしました");
 						}else{
-							$sender->sendMessage(self::TAG."§a".$args[0]."§cにワープする権限がありません");
+							$sender->sendTip("§a".$args[0]."§cにワープする権限がありません");
 						}
 					}else{
-						$sender->sendMessage(self::TAG."§a".$args[0]."§cというワープ地点は存在しません");
+						$sender->sendTip("§a".$args[0]."§cというワープ地点は存在しません");
 					}
 				}
 			}else{
@@ -171,12 +172,12 @@ class WarpSystem extends PluginBase implements Listener{
 				$z = $this->warps->getAll()[$b]["z"];
 				$level = $this->warps->getAll()[$b]["level"];
 				$public = $this->warps->getAll()[$b]["public"];
-				$message = "§f".$b."(X:".$x." Y:".$y." Z:".$z." ワールド:".$level;
+				$message = "§a".$b."§f(X:".$x." Y:".$y." Z:".$z." ワールド:".$level;
 				if($sender->isOp()){
 					if($public){
-						$public = "開放";
+						$public = "§e開放§f";
 					}else{
-						$public = "閉鎖";
+						$public = "§c閉鎖§f";
 					}
 					$message = $message." 状態:".$public.")";
 					$sender->sendMessage($message);
